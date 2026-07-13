@@ -2,28 +2,42 @@ extends CharacterBody3D
 
 @export var NOPEUS = 5.0
 
-var painovoima = ProjectSettings.get_setting("physics/3d/default_gravity")
+var painovoima = 10
 @onready var säde = %PelaajaCast
 var xform : Transform3D
-@export var KÄÄNTÖNOPEUS = 0.3
+@export var KÄÄNTÖNOPEUS = 10.0
 
 var katsomissuunta: Vector2
 @onready var kamera = %Kamera
-var kamera_sens = 50
+var kamera_sens = 10
 
 var hiirikiinni = false
 
+@onready var alus = %Alus
+var painovoimaylös = Vector3.UP
+
 func _physics_process(delta: float) -> void:
 	
-	if not is_on_floor():
-		velocity.y -= painovoima * delta
+	# Haetaan painovoiman suunta
+	if säde.is_colliding():
+		painovoimaylös = säde.get_collision_normal()
+	
+	# Käännetään lattian mukaisesti
+	var eteen = global_transform.basis.z
+	
+	var tavoiteltu = global_transform.looking_at(global_position - eteen, painovoimaylös)
+	global_transform.basis = global_transform.basis.slerp(tavoiteltu.basis, 0.1)
+	
+	up_direction = painovoimaylös
+	
+	velocity.y -= painovoimaylös.y * painovoima * delta
 	
 	# Minne ollaan menossa
 	var input_suunta = Input.get_vector("vasen", "oikea", "eteen", "taakse")
 	var suunta = (transform.basis * Vector3(input_suunta.x, 0, input_suunta.y)).normalized()
 	
 	# Liikutus
-	if suunta:
+	if suunta != Vector3.ZERO:
 		velocity.x = suunta.x * NOPEUS
 		velocity.z = suunta.z * NOPEUS
 	else:
@@ -39,37 +53,29 @@ func _physics_process(delta: float) -> void:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	
 	# Kameran ja liikkeen päivitys
-	_käännä_kamera(delta)
+	_käännä_kamera()
 	move_and_slide()
 	
-	# Käännetään lattian mukaisesti
-	if is_on_floor():
-		käännä_lattialle(säde.get_collision_normal())
+	# Lattiassa kiinni pitäminen ja oikea asento
+	if not is_on_floor():
+		apply_floor_snap()
 	
+	var n = säde.get_collision_normal()
+	var suoristus = align_with_y(global_transform, n)
+	global_transform = global_transform.interpolate_with(suoristus, 12 * delta)
 	
 	return
 
-#
-func käännä_lattialle(lattianormaali):
-	xform = global_transform
-	var nyt_ylös = xform.basis.y
-	
-	var uusi_ylös = lattianormaali
-	var uusi_oikea = nyt_ylös.cross(uusi_ylös).normalized()
-	var uusi_eteen = uusi_oikea.cross(uusi_ylös).normalized()
-	
-	xform.basis = Basis(uusi_oikea, uusi_ylös, uusi_eteen)
-	
-	global_transform = global_transform.interpolate_with(xform, KÄÄNTÖNOPEUS).orthonormalized()
+# Asennon korjauksen avustin
+func align_with_y(suoristus, uusi_y):
+	suoristus.basis.y = uusi_y
+	suoristus.basis.x = -suoristus.basis.z.cross(uusi_y)
+	suoristus.basis = suoristus.basis.orthonormalized()
+	return suoristus
 
-# Kameran kääntäminen
-func _input(tapahtuma: InputEvent):
-	if tapahtuma is InputEventMouseMotion: katsomissuunta = tapahtuma.relative * 0.01
-
-# Kameran kääntäminen
-func _käännä_kamera(delta: float, sens: float = 1.0):
-	#var input = Input.get_vector("katso_vasen", "katso_oikea", "katso_alas", "katso_ylös")
-	#katsomissuunta += input
-	rotation.y -= katsomissuunta.x * kamera_sens * delta
-	kamera.rotation.x = clamp(kamera.rotation.x - katsomissuunta.y * kamera_sens * sens * delta, -1.5, 1.5)
-	katsomissuunta = Vector2.ZERO
+# Kameran ja hahmon kääntäminen
+func _käännä_kamera():
+	if Input.is_action_pressed("kameraoikea"):
+		%Pelaaja.rotate_object_local(Vector3(0,1,0), deg_to_rad(-1.0))
+	if Input.is_action_pressed("kameravasen"):
+		%Pelaaja.rotate_object_local(Vector3(0,1,0), deg_to_rad(1.0))

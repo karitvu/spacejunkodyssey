@@ -3,30 +3,33 @@
 [ext_resource type="Script" uid="uid://dseebgk12ukb6" path="res://Peli/pelaaja.gd" id="1_yd87a"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rk1dd"]
+radius = 15.0
+height = 50.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_yd87a"]
+radius = 15.0
+height = 50.0
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jq8tk"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_0xymd"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yd87a"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_rk1dd"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_rk1dd"]
 
 [node name="Maailma" type="Node3D" unique_id=760366018]
 
 [node name="Alus" type="StaticBody3D" parent="." unique_id=1631776367]
-transform = Transform3D(3, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0)
+unique_name_in_owner = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Alus" unique_id=1046005643]
-transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, 0, 0, 0)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_rk1dd")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Alus" unique_id=96655104]
-transform = Transform3D(5, 0, 0, 0, -2.1855695e-07, -5, 0, 5, -2.1855695e-07, 0, 0, 0)
+[node name="Aluksen_pinta" type="MeshInstance3D" parent="Alus" unique_id=96655104]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
 mesh = SubResource("CapsuleMesh_yd87a")
 
 [node name="Vetovoimakenttä" type="Area3D" parent="Alus" unique_id=647539159]
-unique_name_in_owner = true
 gravity_space_override = 3
 gravity_point = true
 gravity_point_unit_distance = 5.0
@@ -39,21 +42,26 @@ shape = SubResource("CapsuleShape3D_jq8tk")
 
 [node name="Pelaaja" type="CharacterBody3D" parent="." unique_id=2117574214]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 8.589303, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.974453, 0)
+wall_min_slide_angle = 3.1415927
+floor_constant_speed = true
+floor_max_angle = 3.1415927
+floor_snap_length = 1.0
 script = ExtResource("1_yd87a")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Pelaaja" unique_id=1576186248]
-shape = SubResource("BoxShape3D_0xymd")
 
 [node name="Kamera" type="Camera3D" parent="Pelaaja" unique_id=411396616]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.47148943, 3.036922)
+transform = Transform3D(1, 0, 0, 0, 0.8754672, 0.48327756, 0, -0.48327756, 0.8754672, 0, 0.7544441, 0.3776369)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Pelaaja" unique_id=1576186248]
+shape = SubResource("CapsuleShape3D_yd87a")
 
 [node name="Pelaajahahmo" type="MeshInstance3D" parent="Pelaaja" unique_id=16182853]
-mesh = SubResource("BoxMesh_rk1dd")
+mesh = SubResource("CapsuleMesh_rk1dd")
 
 [node name="PelaajaCast" type="RayCast3D" parent="Pelaaja" unique_id=1011193564]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.66614914, 0)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1962219018]
 transform = Transform3D(0.9039196, -0.033026204, 0.42642558, -0.42770258, -0.06979858, 0.9012207, 1.4460334e-09, -0.9970143, -0.0772177, 5.0169363, 22.41802, 0)
