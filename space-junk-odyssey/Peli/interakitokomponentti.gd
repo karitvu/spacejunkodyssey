@@ -12,6 +12,7 @@ func _ready() -> void:
 	%Elkkupalkki.value = Globaalit.VIAT
 	%Hyppypalkki.max_value = Globaalit.VOITTOAIKA
 	%Hyppypalkki.value = Globaalit.HYPPYAIKA
+	korjausaika.wait_time = Globaalit.KORJAUSAIKA
 
 func _input(event):
 	if event.is_action_pressed("korjaa") and voi_interaktaa:
@@ -32,7 +33,7 @@ func _process(_delta: float) -> void:
 		interaktioteksti.hide()
 		mittari.hide()
 	if %Korjausaika.time_left > 0:
-		%Mittari.value = 2.0 - %Korjausaika.time_left
+		%Mittari.value = Globaalit.KORJAUSAIKA - %Korjausaika.time_left
 	%Elkkupalkki.value = Globaalit.MAX_VIAT - Globaalit.VIAT
 	%Hyppypalkki.value = Globaalit.HYPPYAIKA
 

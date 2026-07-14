@@ -48,7 +48,7 @@ offset_bottom = 236.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/fill = SubResource("StyleBoxFlat_2va1e")
-max_value = 2.0
+max_value = 1.5
 show_percentage = false
 
 [node name="Interaktioteksti" type="Label" parent="HUDI/Mittari" unique_id=1207394426]

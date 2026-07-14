@@ -3,8 +3,23 @@
 [ext_resource type="Script" uid="uid://b67nd1of1blvp" path="res://Peli/maailma.gd" id="1_b8ux2"]
 [ext_resource type="Script" uid="uid://dseebgk12ukb6" path="res://Peli/pelaaja.gd" id="1_yd87a"]
 [ext_resource type="PackedScene" uid="uid://5gwxog0yjmag" path="res://Peli/interakitokomponentti.tscn" id="2_0xymd"]
+[ext_resource type="Texture2D" uid="uid://xhjduherlh4l" path="res://Taide/panorama_image.png" id="2_6orbo"]
 [ext_resource type="Script" uid="uid://it6bjaxiyutr" path="res://Peli/spawneri.gd" id="2_rk1dd"]
-[ext_resource type="PackedScene" uid="uid://dgllvxavfqr0d" path="res://Peli/vika.tscn" id="4_7sm40"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_6fhyq"]
+panorama = ExtResource("2_6orbo")
+energy_multiplier = 1.1
+
+[sub_resource type="Sky" id="Sky_jq8tk"]
+sky_material = SubResource("PanoramaSkyMaterial_6fhyq")
+
+[sub_resource type="Environment" id="Environment_3xd07"]
+background_mode = 2
+sky = SubResource("Sky_jq8tk")
+adjustment_enabled = true
+adjustment_brightness = 1.19
+adjustment_contrast = 1.02
+adjustment_saturation = 1.21
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rk1dd"]
 radius = 15.0
@@ -26,7 +41,12 @@ height = 50.0
 script = ExtResource("1_b8ux2")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1962219018]
-transform = Transform3D(0.9039196, -0.033026204, 0.42642558, -0.42770258, -0.06979858, 0.9012207, 1.4460334e-09, -0.9970143, -0.0772177, 5.0169363, 22.41802, 0)
+transform = Transform3D(0.9039196, -0.033026204, 0.42642558, -0.42770258, -0.06979858, 0.9012207, 1.4460334e-09, -0.9970143, -0.0772177, 78.43227, 22.41802, 0)
+light_color = Color(0.2506051, 0, 0.72043425, 1)
+light_energy = 0.407
+
+[node name="Avaruus" type="WorldEnvironment" parent="." unique_id=1619277769]
+environment = SubResource("Environment_3xd07")
 
 [node name="Voittoaika" type="Timer" parent="." unique_id=678211903]
 unique_name_in_owner = true
@@ -85,6 +105,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.66614914, 0)
 [node name="Spawneri" type="CharacterBody3D" parent="." unique_id=822402304]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.974453, -5.923793)
+visible = false
 collision_layer = 2
 collision_mask = 2
 wall_min_slide_angle = 3.1415927
@@ -106,7 +127,7 @@ mesh = SubResource("CapsuleMesh_0xymd")
 
 [node name="Spawniajastin" type="Timer" parent="Spawneri" unique_id=1473685021]
 unique_name_in_owner = true
-wait_time = 10.0
+wait_time = 7.5
 autostart = true
 
 [node name="Suunta-ajastin" type="Timer" parent="Spawneri" unique_id=707772302]
@@ -116,9 +137,6 @@ autostart = true
 
 [node name="Viat" type="Node3D" parent="." unique_id=160049564]
 unique_name_in_owner = true
-
-[node name="Vika" parent="Viat" unique_id=938647559 instance=ExtResource("4_7sm40")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.313662, -9.855424)
 
 [node name="Loppuruutu" type="CanvasLayer" parent="." unique_id=430730121]
 unique_name_in_owner = true

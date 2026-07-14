@@ -6,7 +6,6 @@ extends StaticBody3D
 func _ready() -> void:
 	interaktioitava.interaktaa = _interaktio
 	
-
 func _interaktio():
 	print("korjaa")
 	Globaalit.VIAT -= 1

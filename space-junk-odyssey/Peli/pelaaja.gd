@@ -56,6 +56,8 @@ func _physics_process(delta: float) -> void:
 	_käännä_kamera()
 	move_and_slide()
 	
+	
+	
 	# Lattiassa kiinni pitäminen ja oikea asento
 	if not is_on_floor():
 		apply_floor_snap()
