@@ -1,0 +1,139 @@
+[gd_scene format=3 uid="uid://5gwxog0yjmag"]
+
+[ext_resource type="Script" uid="uid://ceda4ajpw0wis" path="res://Peli/interakitokomponentti.gd" id="1_ynhrs"]
+[ext_resource type="Texture2D" uid="uid://b4pmrijtdqgvp" path="res://Taide/icon.svg" id="2_f1l0t"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_3xd07"]
+height = 1.4893799
+radius = 0.78125
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2va1e"]
+bg_color = Color(0, 1, 0, 0.5882353)
+
+[sub_resource type="LabelSettings" id="LabelSettings_3xd07"]
+font_color = Color(0, 0.6666667, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3xd07"]
+bg_color = Color(0, 1, 0, 0.5882353)
+
+[node name="Interakitokomponentti" type="Node3D" unique_id=444952518]
+script = ExtResource("1_ynhrs")
+
+[node name="Interaktioetäisyys" type="Area3D" parent="." unique_id=870393216]
+unique_name_in_owner = true
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Interaktioetäisyys" unique_id=1311519419]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.57647705, 0)
+shape = SubResource("CylinderShape3D_3xd07")
+
+[node name="Korjausaika" type="Timer" parent="." unique_id=590177067]
+unique_name_in_owner = true
+wait_time = 2.0
+
+[node name="HUDI" type="CanvasLayer" parent="." unique_id=914900546]
+
+[node name="Mittari" type="ProgressBar" parent="HUDI" unique_id=625858676]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -75.0
+offset_top = 209.0
+offset_right = 75.0
+offset_bottom = 236.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_2va1e")
+max_value = 2.0
+show_percentage = false
+
+[node name="Interaktioteksti" type="Label" parent="HUDI/Mittari" unique_id=1207394426]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.5
+offset_top = -38.5
+offset_right = 80.5
+offset_bottom = -15.5
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+text = "Hold Space to Repair"
+label_settings = SubResource("LabelSettings_3xd07")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elkkupalkki" type="TextureProgressBar" parent="HUDI" unique_id=721018199]
+unique_name_in_owner = true
+self_modulate = Color(1, 1, 1, 0.5882353)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 39.0
+offset_top = -170.0
+offset_right = 167.0
+offset_bottom = -42.0
+grow_vertical = 0
+max_value = 5.0
+value = 5.0
+fill_mode = 3
+texture_under = ExtResource("2_f1l0t")
+texture_progress = ExtResource("2_f1l0t")
+tint_under = Color(1, 0, 0, 1)
+tint_progress = Color(0, 1, 0, 1)
+
+[node name="Teksti" type="Label" parent="HUDI/Elkkupalkki" unique_id=1391927083]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -45.0
+offset_top = -26.0
+offset_right = 45.0
+offset_bottom = -3.0
+grow_horizontal = 2
+text = "Ship Health"
+label_settings = SubResource("LabelSettings_3xd07")
+
+[node name="Hyppypalkki" type="ProgressBar" parent="HUDI" unique_id=1144631754]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -308.0
+offset_top = -23.0
+offset_right = 308.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/fill = SubResource("StyleBoxFlat_3xd07")
+step = 0.1
+show_percentage = false
+
+[node name="Teksti" type="Label" parent="HUDI/Hyppypalkki" unique_id=1651206507]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -45.0
+offset_top = -27.0
+offset_right = 45.0
+offset_bottom = -4.0
+grow_horizontal = 2
+text = "Warp Progress"
+label_settings = SubResource("LabelSettings_3xd07")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="area_entered" from="Interaktioetäisyys" to="." method="_on_interaktioetäisyys_area_entered"]
+[connection signal="area_exited" from="Interaktioetäisyys" to="." method="_on_interaktioetäisyys_area_exited"]
+[connection signal="timeout" from="Korjausaika" to="." method="_on_korjausaika_timeout"]

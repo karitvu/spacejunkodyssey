@@ -1,20 +1,24 @@
 extends CharacterBody3D
 
-@export var NOPEUS = 5.0
+@export var NOPEUS = 10.0
 
 var painovoima = 10
-@onready var säde = %PelaajaCast
+@onready var säde = %Spawnicast
 var xform : Transform3D
-@export var KÄÄNTÖNOPEUS = 1.0
+@export var KÄÄNTÖ = 25.0
 
 var katsomissuunta: Vector2
-@onready var kamera = %Kamera
-var kamera_sens = 10
-
-var hiirikiinni = false
 
 @onready var alus = %Alus
 var painovoimaylös = Vector3.UP
+
+@onready var spawniaika = %Spawniajastin
+@onready var suunta_aika = %"Suunta-ajastin"
+var suunnat = [Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]
+var käännökset = ["oikea", "vasen", "suoraan"]
+var input_suunta = suunnat.pick_random()
+
+var vika = preload("res://Peli/vika.tscn")
 
 func _physics_process(delta: float) -> void:
 	
@@ -33,7 +37,6 @@ func _physics_process(delta: float) -> void:
 	velocity.y -= painovoimaylös.y * painovoima * delta
 	
 	# Minne ollaan menossa
-	var input_suunta = Input.get_vector("vasen", "oikea", "eteen", "taakse")
 	var suunta = (transform.basis * Vector3(input_suunta.x, 0, input_suunta.y)).normalized()
 	
 	# Liikutus
@@ -44,16 +47,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, NOPEUS)
 		velocity.z = move_toward(velocity.z, 0, NOPEUS)
 	
-	# Hiiren lukitseminen
-	if Input.is_action_just_pressed("pause"):
-		hiirikiinni = !hiirikiinni
-		if hiirikiinni:
-			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-		else:
-			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
-	
-	# Kameran ja liikkeen päivitys
-	_käännä_kamera()
+	# Liikkeen päivitys
 	move_and_slide()
 	
 	# Lattiassa kiinni pitäminen ja oikea asento
@@ -74,8 +68,25 @@ func align_with_y(suoristus, uusi_y):
 	return suoristus
 
 # Kameran ja hahmon kääntäminen
-func _käännä_kamera():
-	if Input.is_action_pressed("kameraoikea"):
-		%Pelaaja.rotate_object_local(Vector3(0,1,0), deg_to_rad(-KÄÄNTÖNOPEUS))
-	if Input.is_action_pressed("kameravasen"):
-		%Pelaaja.rotate_object_local(Vector3(0,1,0), deg_to_rad(KÄÄNTÖNOPEUS))
+func _käännä_suuntaa():
+	var minne = käännökset.pick_random()
+	if minne == "oikea":
+		%Spawneri.rotate_object_local(Vector3(0,1,0), deg_to_rad(-KÄÄNTÖ))
+	if minne == "vasen":
+		%Spawneri.rotate_object_local(Vector3(0,1,0), deg_to_rad(KÄÄNTÖ))
+
+# Muutetaan suuntaa ajastimella
+func _on_suuntaajastin_timeout() -> void:
+	input_suunta = suunnat.pick_random()
+	_käännä_suuntaa()
+
+# Spawnataan vika
+func _on_spawniajastin_timeout() -> void:
+	print("VIKAPAIKKA")
+	print(global_basis)
+	var uusivika = vika.instantiate()
+	var paikka = global_transform
+	uusivika.global_transform = paikka
+	%Viat.add_child(uusivika)
+	Globaalit.VIAT += 1
+	

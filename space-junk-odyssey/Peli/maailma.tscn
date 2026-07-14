@@ -1,6 +1,10 @@
 [gd_scene format=3 uid="uid://devw3lvvq2ln7"]
 
+[ext_resource type="Script" uid="uid://b67nd1of1blvp" path="res://Peli/maailma.gd" id="1_b8ux2"]
 [ext_resource type="Script" uid="uid://dseebgk12ukb6" path="res://Peli/pelaaja.gd" id="1_yd87a"]
+[ext_resource type="PackedScene" uid="uid://5gwxog0yjmag" path="res://Peli/interakitokomponentti.tscn" id="2_0xymd"]
+[ext_resource type="Script" uid="uid://it6bjaxiyutr" path="res://Peli/spawneri.gd" id="2_rk1dd"]
+[ext_resource type="PackedScene" uid="uid://dgllvxavfqr0d" path="res://Peli/vika.tscn" id="4_7sm40"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rk1dd"]
 radius = 15.0
@@ -16,10 +20,22 @@ height = 50.0
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_rk1dd"]
 
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_0xymd"]
+
 [node name="Maailma" type="Node3D" unique_id=760366018]
+script = ExtResource("1_b8ux2")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1962219018]
+transform = Transform3D(0.9039196, -0.033026204, 0.42642558, -0.42770258, -0.06979858, 0.9012207, 1.4460334e-09, -0.9970143, -0.0772177, 5.0169363, 22.41802, 0)
+
+[node name="Voittoaika" type="Timer" parent="." unique_id=678211903]
+unique_name_in_owner = true
+autostart = true
 
 [node name="Alus" type="StaticBody3D" parent="." unique_id=1631776367]
 unique_name_in_owner = true
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Alus" unique_id=1046005643]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
@@ -27,6 +43,7 @@ shape = SubResource("CapsuleShape3D_rk1dd")
 
 [node name="Aluksen_pinta" type="MeshInstance3D" parent="Alus" unique_id=96655104]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
+layers = 3
 mesh = SubResource("CapsuleMesh_yd87a")
 
 [node name="Vetovoimakenttä" type="Area3D" parent="Alus" unique_id=647539159]
@@ -51,7 +68,7 @@ script = ExtResource("1_yd87a")
 
 [node name="Kamera" type="Camera3D" parent="Pelaaja" unique_id=411396616]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 0.8754672, 0.48327756, 0, -0.48327756, 0.8754672, 0, 0.7544441, 0.3776369)
+transform = Transform3D(1, 0, 0, 0, 0.8754672, 0.48327756, 0, -0.48327756, 0.8754672, 0, 0.7544441, -0.105731964)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Pelaaja" unique_id=1576186248]
 shape = SubResource("CapsuleShape3D_yd87a")
@@ -63,5 +80,98 @@ mesh = SubResource("CapsuleMesh_rk1dd")
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.66614914, 0)
 
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1962219018]
-transform = Transform3D(0.9039196, -0.033026204, 0.42642558, -0.42770258, -0.06979858, 0.9012207, 1.4460334e-09, -0.9970143, -0.0772177, 5.0169363, 22.41802, 0)
+[node name="Interakitokomponentti" parent="Pelaaja" unique_id=444952518 instance=ExtResource("2_0xymd")]
+
+[node name="Spawneri" type="CharacterBody3D" parent="." unique_id=822402304]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.974453, -5.923793)
+collision_layer = 2
+collision_mask = 2
+wall_min_slide_angle = 3.1415927
+floor_constant_speed = true
+floor_max_angle = 3.1415927
+floor_snap_length = 1.0
+script = ExtResource("2_rk1dd")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Spawneri" unique_id=597381156]
+shape = SubResource("CapsuleShape3D_yd87a")
+
+[node name="Spawnicast" type="RayCast3D" parent="Spawneri" unique_id=799367799]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6603775, 0)
+collision_mask = 2
+
+[node name="Pelaajahahmo" type="MeshInstance3D" parent="Spawneri" unique_id=1115910323]
+mesh = SubResource("CapsuleMesh_0xymd")
+
+[node name="Spawniajastin" type="Timer" parent="Spawneri" unique_id=1473685021]
+unique_name_in_owner = true
+wait_time = 10.0
+autostart = true
+
+[node name="Suunta-ajastin" type="Timer" parent="Spawneri" unique_id=707772302]
+unique_name_in_owner = true
+wait_time = 2.5
+autostart = true
+
+[node name="Viat" type="Node3D" parent="." unique_id=160049564]
+unique_name_in_owner = true
+
+[node name="Vika" parent="Viat" unique_id=938647559 instance=ExtResource("4_7sm40")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.313662, -9.855424)
+
+[node name="Loppuruutu" type="CanvasLayer" parent="." unique_id=430730121]
+unique_name_in_owner = true
+process_mode = 3
+visible = false
+
+[node name="Väri" type="ColorRect" parent="Loppuruutu" unique_id=48955697]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.654902)
+
+[node name="Teksti" type="RichTextLabel" parent="Loppuruutu" unique_id=1593704815]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -51.5
+offset_top = -186.0
+offset_right = 51.5
+offset_bottom = -144.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/default_color = Color(0, 0.6862745, 0, 1)
+theme_override_font_sizes/normal_font_size = 30
+bbcode_enabled = true
+text = "LOREM"
+fit_content = true
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Nappi" type="Button" parent="Loppuruutu" unique_id=708090162]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -48.0
+offset_top = -15.5
+offset_right = 48.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0, 0.6862745, 0, 1)
+text = "Main Menu"
+
+[connection signal="timeout" from="Voittoaika" to="." method="_on_voittoaika_timeout"]
+[connection signal="timeout" from="Spawneri/Spawniajastin" to="Spawneri" method="_on_spawniajastin_timeout"]
+[connection signal="timeout" from="Spawneri/Suunta-ajastin" to="Spawneri" method="_on_suuntaajastin_timeout"]
+[connection signal="pressed" from="Loppuruutu/Nappi" to="." method="_on_nappi_pressed"]

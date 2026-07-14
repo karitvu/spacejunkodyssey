@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://4455ir2nqko7"]
+
+[ext_resource type="Script" uid="uid://13l0k8hqnfrg" path="res://Peli/interaktioitava.gd" id="1_unsnl"]
+
+[node name="Interaktioitava" type="Area3D" unique_id=185321842]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_unsnl")
