@@ -19,6 +19,21 @@ var käännökset = ["oikea", "vasen", "suoraan"]
 var input_suunta = suunnat.pick_random()
 
 var vika = preload("res://Peli/vika.tscn")
+var räjähdys = preload("res://Peli/räjähdys.tscn")
+
+# Poistetaan latauslagi lataamalla ja poistamalla
+func _ready() -> void:
+	var lagi = vika.instantiate()
+	var piikki = räjähdys.instantiate()
+	
+	lagi.global_position = Vector3(1000,1000,1000)
+	piikki.global_position = Vector3(1000,1000,1000)
+	
+	%Viat.add_child(lagi)
+	%Viat.add_child(piikki)
+	
+	await get_tree().create_timer(2.0).timeout
+	lagi.queue_free()
 
 func _physics_process(delta: float) -> void:
 	
@@ -85,8 +100,11 @@ func _on_spawniajastin_timeout() -> void:
 	print("VIKAPAIKKA")
 	print(global_basis)
 	var uusivika = vika.instantiate()
+	var pum = räjähdys.instantiate()
 	var paikka = global_transform
 	uusivika.global_transform = paikka
+	pum.global_transform = paikka
 	%Viat.add_child(uusivika)
+	%Viat.add_child(pum)
 	Globaalit.VIAT += 1
 	

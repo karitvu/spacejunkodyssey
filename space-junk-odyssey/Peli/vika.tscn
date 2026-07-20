@@ -5,6 +5,7 @@
 [ext_resource type="AudioStream" uid="uid://dlkp731uvno72" path="res://Äänet/Metal Pipe.wav" id="3_0x0ke"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_3xd07"]
+size = Vector3(1, 1.1293945, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_3xd07"]
 
@@ -15,18 +16,47 @@ albedo_color = Color(1, 0, 0, 1)
 height = 1.949707
 radius = 1.8632813
 
+[sub_resource type="Gradient" id="Gradient_0x0ke"]
+colors = PackedColorArray(0.19451791, 0.9944021, 0.9999998, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_j0ogg"]
+gradient = SubResource("Gradient_0x0ke")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6fhyq"]
+spread = 90.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 0, 2)
+scale_min = 0.5
+color_ramp = SubResource("GradientTexture1D_j0ogg")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_on2q6"]
+transparency = 1
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 1, 1, 1)
+emission_enabled = true
+emission = Color(0.8149164, 0.8804994, 1, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_3xd07"]
+material = SubResource("StandardMaterial3D_on2q6")
+radius = 0.05
+height = 0.1
+radial_segments = 8
+rings = 6
+
 [node name="Vika" type="StaticBody3D" unique_id=938647559]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_acgcj")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=206056034]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12467426, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18937153, 0)
 shape = SubResource("BoxShape3D_3xd07")
 
 [node name="Malli" type="MeshInstance3D" parent="." unique_id=359889840]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.12467426, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.002397418, -0.45344597, 0.0013757944)
 mesh = SubResource("BoxMesh_3xd07")
 surface_material_override/0 = SubResource("StandardMaterial3D_jq8tk")
 
@@ -40,3 +70,10 @@ shape = SubResource("CylinderShape3D_xlf1u")
 [node name="Ääni" type="AudioStreamPlayer3D" parent="." unique_id=1144539832]
 stream = ExtResource("3_0x0ke")
 autoplay = true
+
+[node name="Kipinät" type="GPUParticles3D" parent="." unique_id=592452315]
+amount = 4
+explosiveness = 0.5
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_6fhyq")
+draw_pass_1 = SubResource("SphereMesh_3xd07")

@@ -18,6 +18,18 @@ var painovoimaylös = Vector3.UP
 
 func _physics_process(delta: float) -> void:
 	
+	# Minne ollaan menossa
+	var input_suunta = Input.get_vector("vasen", "oikea", "eteen", "taakse")
+	var suunta = (transform.basis * Vector3(input_suunta.x, 0, input_suunta.y)).normalized()
+	
+	# Liikutus
+	if suunta != Vector3.ZERO:
+		velocity.x = suunta.x * NOPEUS
+		velocity.z = suunta.z * NOPEUS
+	else:
+		velocity.x = move_toward(velocity.x, 0, NOPEUS)
+		velocity.z = move_toward(velocity.z, 0, NOPEUS)
+	
 	# Haetaan painovoiman suunta
 	if säde.is_colliding():
 		painovoimaylös = säde.get_collision_normal()
@@ -31,18 +43,6 @@ func _physics_process(delta: float) -> void:
 	up_direction = painovoimaylös
 	
 	velocity.y -= painovoimaylös.y * painovoima * delta
-	
-	# Minne ollaan menossa
-	var input_suunta = Input.get_vector("vasen", "oikea", "eteen", "taakse")
-	var suunta = (transform.basis * Vector3(input_suunta.x, 0, input_suunta.y)).normalized()
-	
-	# Liikutus
-	if suunta != Vector3.ZERO:
-		velocity.x = suunta.x * NOPEUS
-		velocity.z = suunta.z * NOPEUS
-	else:
-		velocity.x = move_toward(velocity.x, 0, NOPEUS)
-		velocity.z = move_toward(velocity.z, 0, NOPEUS)
 	
 	# Hiiren lukitseminen
 	if Input.is_action_just_pressed("pause"):

@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://5gwxog0yjmag" path="res://Peli/interakitokomponentti.tscn" id="2_0xymd"]
 [ext_resource type="Texture2D" uid="uid://xhjduherlh4l" path="res://Taide/panorama_image.png" id="2_6orbo"]
 [ext_resource type="Script" uid="uid://it6bjaxiyutr" path="res://Peli/spawneri.gd" id="2_rk1dd"]
+[ext_resource type="PackedScene" uid="uid://bnsi3b5i4adus" path="res://Taide/Holoraketti.glb" id="2_uui6q"]
+[ext_resource type="PackedScene" uid="uid://nip2npe2nmtf" path="res://Taide/Raketti.glb" id="3_6orbo"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_6fhyq"]
 panorama = ExtResource("2_6orbo")
@@ -21,21 +23,42 @@ adjustment_brightness = 1.19
 adjustment_contrast = 1.02
 adjustment_saturation = 1.21
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_rk1dd"]
-radius = 15.0
-height = 50.0
-
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_yd87a"]
-radius = 15.0
-height = 50.0
-
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_jq8tk"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_263ss"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_6orbo"]
+height = 10.826115
+radius = 19.911133
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_hjxqt"]
+height = 10.658512
+radius = 4.972168
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_6orbo"]
+friction = 0.0
+bounce = 0.15
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_uui6q"]
+radius = 1.5800781
+height = 9.987549
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_yd87a"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_rk1dd"]
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_0xymd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jq8tk"]
+albedo_color = Color(0, 1, 0, 1)
+disable_receive_shadows = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3xd07"]
+material = SubResource("StandardMaterial3D_jq8tk")
+size = Vector2(1000, 1000)
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_jq8tk"]
+viewport_path = NodePath("Kartankääntö/Kuvakulma")
 
 [node name="Maailma" type="Node3D" unique_id=760366018]
 script = ExtResource("1_b8ux2")
@@ -44,6 +67,7 @@ script = ExtResource("1_b8ux2")
 transform = Transform3D(0.9039196, -0.033026204, 0.42642558, -0.42770258, -0.06979858, 0.9012207, 1.4460334e-09, -0.9970143, -0.0772177, 78.43227, 22.41802, 0)
 light_color = Color(0.2506051, 0, 0.72043425, 1)
 light_energy = 0.407
+light_cull_mask = 4294966273
 
 [node name="Avaruus" type="WorldEnvironment" parent="." unique_id=1619277769]
 environment = SubResource("Environment_3xd07")
@@ -54,17 +78,12 @@ autostart = true
 
 [node name="Alus" type="StaticBody3D" parent="." unique_id=1631776367]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -10.7064705)
 collision_layer = 3
 collision_mask = 3
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Alus" unique_id=1046005643]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-shape = SubResource("CapsuleShape3D_rk1dd")
-
-[node name="Aluksen_pinta" type="MeshInstance3D" parent="Alus" unique_id=96655104]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, 0, 0)
-layers = 3
-mesh = SubResource("CapsuleMesh_yd87a")
+[node name="Holoraketti" parent="Alus" unique_id=2127725654 instance=ExtResource("2_uui6q")]
+transform = Transform3D(4.739278, 3.1557902e-11, -0.08272034, 0.08272034, -3.6158208e-09, 4.739278, -3.1557902e-11, -4.74, -3.6158208e-09, 0, 0, 0)
 
 [node name="Vetovoimakenttä" type="Area3D" parent="Alus" unique_id=647539159]
 gravity_space_override = 3
@@ -77,35 +96,77 @@ gravity_direction = Vector3(0, 0, 0)
 transform = Transform3D(10, 0, 0, 0, -4.371139e-07, -10, 0, 10, -4.371139e-07, 0, 0, 0)
 shape = SubResource("CapsuleShape3D_jq8tk")
 
-[node name="Pelaaja" type="CharacterBody3D" parent="." unique_id=2117574214]
+[node name="Raketti" parent="Alus" unique_id=2062020761 instance=ExtResource("3_6orbo")]
+transform = Transform3D(4.739278, 3.1557902e-11, -0.082724296, 0.082724296, -3.615994e-09, 4.739278, -3.1557902e-11, -4.74, -3.615994e-09, 0, 0, 0)
+
+[node name="Älä valita Godot" type="CollisionShape3D" parent="Alus" unique_id=1937909140]
+shape = SubResource("SphereShape3D_263ss")
+
+[node name="Suojakenttä" type="StaticBody3D" parent="Alus" unique_id=364987274]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 46.67095)
+visible = false
+collision_layer = 3
+collision_mask = 3
+
+[node name="Este" type="CollisionShape3D" parent="Alus/Suojakenttä" unique_id=1785241086]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -1.468656e-07, 1.0130615)
+shape = SubResource("CylinderShape3D_6orbo")
+debug_color = Color(0.9529412, 0, 0.5568628, 1)
+
+[node name="Este2" type="CollisionShape3D" parent="Alus/Suojakenttä" unique_id=917283824]
+transform = Transform3D(0.9998477, -0.017452406, 0, 0.017452406, 0.9998477, 0, 0, 0, 1, -0.33598614, 12.330877, -67.11171)
+shape = SubResource("CylinderShape3D_hjxqt")
+debug_color = Color(0.9529412, 0, 0.5568628, 1)
+
+[node name="Suojakenttä2" type="StaticBody3D" parent="Alus" unique_id=352883991]
+collision_layer = 3
+collision_mask = 3
+physics_material_override = SubResource("PhysicsMaterial_6orbo")
+
+[node name="Este4" type="CollisionShape3D" parent="Alus/Suojakenttä2" unique_id=346911941]
+transform = Transform3D(0.9957432, -0.09147961, 0.011265964, 0.0031806733, -0.0880523, -0.9961106, 0.09211584, 0.9919064, -0.08738651, 11.670572, 7.0423193, 36.200504)
+shape = SubResource("CapsuleShape3D_uui6q")
+debug_color = Color(0.28080097, 0.6315664, 1.92523e-07, 0.41960785)
+
+[node name="Este6" type="CollisionShape3D" parent="Alus/Suojakenttä2" unique_id=1087040010]
+transform = Transform3D(0.7667341, -0.16112977, 0.6214143, -0.62326825, 0.04507129, 0.7807082, -0.15380335, -0.9859033, -0.0658693, -12.06927, 6.6276245, 36.200504)
+shape = SubResource("CapsuleShape3D_uui6q")
+debug_color = Color(0.28080097, 0.6315664, 1.92523e-07, 0.41960785)
+
+[node name="Este5" type="CollisionShape3D" parent="Alus/Suojakenttä2" unique_id=1314791521]
+transform = Transform3D(0.99945146, -0.032558378, 0.0060693985, 0.011154653, 0.15836555, -0.9873175, 0.031184312, 0.9868437, 0.15864182, 0.42483926, -13.512617, 36.200504)
+shape = SubResource("CapsuleShape3D_uui6q")
+debug_color = Color(0.28080097, 0.6315664, 1.92523e-07, 0.41960785)
+
+[node name="Pelaaja" type="CharacterBody3D" parent="Alus" unique_id=2117574214]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.974453, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.450284, 7.002846)
 wall_min_slide_angle = 3.1415927
 floor_constant_speed = true
-floor_max_angle = 3.1415927
+floor_max_angle = 1.0559242
 floor_snap_length = 1.0
 script = ExtResource("1_yd87a")
 
-[node name="Kamera" type="Camera3D" parent="Pelaaja" unique_id=411396616]
+[node name="Kamera" type="Camera3D" parent="Alus/Pelaaja" unique_id=411396616]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 0.8754672, 0.48327756, 0, -0.48327756, 0.8754672, 0, 0.7544441, -0.105731964)
+cull_mask = 1047553
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Pelaaja" unique_id=1576186248]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Alus/Pelaaja" unique_id=1576186248]
 shape = SubResource("CapsuleShape3D_yd87a")
 
-[node name="Pelaajahahmo" type="MeshInstance3D" parent="Pelaaja" unique_id=16182853]
+[node name="Pelaajahahmo" type="MeshInstance3D" parent="Alus/Pelaaja" unique_id=16182853]
 mesh = SubResource("CapsuleMesh_rk1dd")
 
-[node name="PelaajaCast" type="RayCast3D" parent="Pelaaja" unique_id=1011193564]
+[node name="PelaajaCast" type="RayCast3D" parent="Alus/Pelaaja" unique_id=1011193564]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.66614914, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.666, 0)
 
-[node name="Interakitokomponentti" parent="Pelaaja" unique_id=444952518 instance=ExtResource("2_0xymd")]
+[node name="Interakitokomponentti" parent="Alus/Pelaaja" unique_id=444952518 instance=ExtResource("2_0xymd")]
 
-[node name="Spawneri" type="CharacterBody3D" parent="." unique_id=822402304]
+[node name="Spawneri" type="CharacterBody3D" parent="Alus" unique_id=822402304]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15.974453, -5.923793)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.630663, -4.442511)
 collision_layer = 2
 collision_mask = 2
 wall_min_slide_angle = 3.1415927
@@ -114,28 +175,28 @@ floor_max_angle = 3.1415927
 floor_snap_length = 1.0
 script = ExtResource("2_rk1dd")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Spawneri" unique_id=597381156]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Alus/Spawneri" unique_id=597381156]
 shape = SubResource("CapsuleShape3D_yd87a")
 
-[node name="Spawnicast" type="RayCast3D" parent="Spawneri" unique_id=799367799]
+[node name="Spawnicast" type="RayCast3D" parent="Alus/Spawneri" unique_id=799367799]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6603775, 0)
 collision_mask = 2
 
-[node name="Pelaajahahmo" type="MeshInstance3D" parent="Spawneri" unique_id=1115910323]
+[node name="Pelaajahahmo" type="MeshInstance3D" parent="Alus/Spawneri" unique_id=1115910323]
 mesh = SubResource("CapsuleMesh_0xymd")
 
-[node name="Spawniajastin" type="Timer" parent="Spawneri" unique_id=1473685021]
+[node name="Spawniajastin" type="Timer" parent="Alus/Spawneri" unique_id=1473685021]
 unique_name_in_owner = true
 wait_time = 7.5
 autostart = true
 
-[node name="Suunta-ajastin" type="Timer" parent="Spawneri" unique_id=707772302]
+[node name="Suunta-ajastin" type="Timer" parent="Alus/Spawneri" unique_id=707772302]
 unique_name_in_owner = true
 wait_time = 2.5
 autostart = true
 
-[node name="Viat" type="Node3D" parent="." unique_id=160049564]
+[node name="Viat" type="Node3D" parent="Alus" unique_id=160049564]
 unique_name_in_owner = true
 
 [node name="Loppuruutu" type="CanvasLayer" parent="." unique_id=430730121]
@@ -189,7 +250,53 @@ grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0.6862745, 0, 1)
 text = "Main Menu"
 
+[node name="Kartankääntö" type="Node3D" parent="." unique_id=989370814]
+unique_name_in_owner = true
+
+[node name="Kartta" type="StaticBody3D" parent="Kartankääntö" unique_id=760815863]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Kartankääntö/Kartta" unique_id=1017385735]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -139.60304, 0)
+layers = 8
+mesh = SubResource("PlaneMesh_3xd07")
+
+[node name="Karttavalo" type="DirectionalLight3D" parent="Kartankääntö/Kartta" unique_id=1422263418]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 79.67799, 0)
+layers = 2
+light_energy = 7.495
+light_cull_mask = 4294966274
+sky_mode = 1
+
+[node name="Minikartta" type="TextureRect" parent="Kartankääntö/Kartta" unique_id=1148948960]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -353.0
+offset_top = -333.0
+offset_right = 159.0
+offset_bottom = 179.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(0.5, 0.5)
+texture = SubResource("ViewportTexture_jq8tk")
+
+[node name="Kameraankkuri" type="Node3D" parent="Kartankääntö" unique_id=965450381]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 80.975006, 11.182432)
+
+[node name="Kuvakulma" type="SubViewport" parent="Kartankääntö" unique_id=1183672632]
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="Karttakamera" type="Camera3D" parent="Kartankääntö/Kuvakulma" unique_id=1231756239]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 80.975006, 11.182432)
+cull_mask = 1047562
+
 [connection signal="timeout" from="Voittoaika" to="." method="_on_voittoaika_timeout"]
-[connection signal="timeout" from="Spawneri/Spawniajastin" to="Spawneri" method="_on_spawniajastin_timeout"]
-[connection signal="timeout" from="Spawneri/Suunta-ajastin" to="Spawneri" method="_on_suuntaajastin_timeout"]
+[connection signal="timeout" from="Alus/Spawneri/Spawniajastin" to="Alus/Spawneri" method="_on_spawniajastin_timeout"]
+[connection signal="timeout" from="Alus/Spawneri/Suunta-ajastin" to="Alus/Spawneri" method="_on_suuntaajastin_timeout"]
 [connection signal="pressed" from="Loppuruutu/Nappi" to="." method="_on_nappi_pressed"]
