@@ -1,6 +1,29 @@
 [gd_scene format=3 uid="uid://b5atwh536bvmo"]
 
 [ext_resource type="Script" uid="uid://cq28eom31uho3" path="res://Peli/aloitusruutu.gd" id="1_tca0q"]
+[ext_resource type="Shader" uid="uid://dhmwjh2fyf5wg" path="res://Taide/maailma.gdshader" id="2_snink"]
+[ext_resource type="FontFile" uid="uid://bf18iu4gwpa38" path="res://Taide/Xolonium-Regular.ttf" id="3_f13il"]
+[ext_resource type="PackedScene" uid="uid://bnsi3b5i4adus" path="res://Taide/Holoraketti.glb" id="3_xl1bl"]
+[ext_resource type="FontFile" uid="uid://n8dgi5bte5yr" path="res://Taide/Xolonium-Bold.ttf" id="4_c2hkt"]
+[ext_resource type="AudioStream" uid="uid://meodybslwymg" path="res://Äänet/Korjattu nappula.wav" id="6_c2hkt"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_xl1bl"]
+shader = ExtResource("2_snink")
+shader_parameter/scanlines_1 = 513.075
+shader_parameter/scanlines_2 = 15.51
+shader_parameter/scan_reduction = 0.01
+shader_parameter/blur = 0.10000000149012
+shader_parameter/diffusion = 0.1
+shader_parameter/vinnette_alpla = 0.0999999977648
+shader_parameter/vinnette_inner_radius = 10.06
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jq8tk"]
+albedo_color = Color(7.2196127e-07, 0.4493385, 4.813075e-07, 1)
+disable_receive_shadows = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_3xd07"]
+material = SubResource("StandardMaterial3D_jq8tk")
+size = Vector2(1000, 1000)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3xd07"]
 content_margin_left = 10.0
@@ -8,6 +31,11 @@ content_margin_top = 10.0
 content_margin_right = 10.0
 content_margin_bottom = 10.0
 bg_color = Color(0, 0, 0, 0.33333334)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_3xd07"]
+random_pitch = 1.0717734
+streams_count = 1
+stream_0/stream = ExtResource("6_c2hkt")
 
 [node name="Aloitusruutu" type="Control" unique_id=368266354]
 layout_mode = 3
@@ -27,6 +55,38 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0.18039216, 0, 1)
 
+[node name="SubViewportContainer" type="SubViewportContainer" parent="." unique_id=1182766770]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer" unique_id=955074418]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer/SubViewport" unique_id=930256684]
+transform = Transform3D(0.46792984, 0.88376564, 0, -0.88376564, 0.46792984, 0, 0, 0, 1, 1.14, -1.983, 14.856)
+
+[node name="Varjostimet" type="CanvasLayer" parent="." unique_id=1501882590]
+layer = 0
+
+[node name="CRT" type="ColorRect" parent="Varjostimet" unique_id=453197260]
+z_as_relative = false
+material = SubResource("ShaderMaterial_xl1bl")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+metadata/_edit_use_anchors_ = true
+
 [node name="Nimi" type="RichTextLabel" parent="." unique_id=1870111849]
 clip_contents = false
 layout_mode = 1
@@ -38,12 +98,28 @@ offset_right = 327.5
 offset_bottom = 172.0
 grow_horizontal = 2
 theme_override_colors/default_color = Color(0, 0.6862745, 0, 1)
+theme_override_fonts/normal_font = ExtResource("3_f13il")
+theme_override_fonts/bold_font = ExtResource("4_c2hkt")
 theme_override_font_sizes/normal_font_size = 50
 bbcode_enabled = true
 text = "[wave amp=50.0 freq=5.0 connected=1][pulse freq=1.0 color=#ffffff40 ease=-2.0]Space Junk Odyssey[/pulse][/wave]"
 fit_content = true
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="SpotLight3D" type="SpotLight3D" parent="." unique_id=191909595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.105, 2.28, 23.2698)
+light_energy = 34.141
+spot_range = 292.67236
+spot_angle = 101.67
+
+[node name="Holoraketti" parent="." unique_id=1732733890 instance=ExtResource("3_xl1bl")]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.105, 2.28, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=272290794]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0.0512619, -0.14408493, -70.98381)
+mesh = SubResource("PlaneMesh_3xd07")
 
 [node name="Pelaa" type="Button" parent="." unique_id=1305581998]
 unique_name_in_owner = true
@@ -53,19 +129,25 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -41.5
-offset_top = -26.5
-offset_right = 41.5
-offset_bottom = 26.5
+offset_left = -54.5
+offset_top = -29.5
+offset_right = 54.5
+offset_bottom = 29.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0.6862745, 0, 1)
 theme_override_colors/font_focus_color = Color(0, 0.8776587, 0, 1)
 theme_override_colors/font_hover_color = Color(0, 0.8784314, 0, 1)
 theme_override_colors/font_hover_pressed_color = Color(0, 0.8784314, 0, 1)
+theme_override_fonts/font = ExtResource("4_c2hkt")
 theme_override_font_sizes/font_size = 32
 theme_override_styles/normal = SubResource("StyleBoxFlat_3xd07")
 text = "Start"
 icon_alignment = 1
+
+[node name="Nappiääni" type="AudioStreamPlayer" parent="." unique_id=1226698036]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_3xd07")
+volume_db = -1.0
 
 [connection signal="pressed" from="Pelaa" to="." method="_on_pelaa_pressed"]

@@ -1,7 +1,10 @@
 [gd_scene format=3 uid="uid://5gwxog0yjmag"]
 
 [ext_resource type="Script" uid="uid://ceda4ajpw0wis" path="res://Peli/interakitokomponentti.gd" id="1_ynhrs"]
-[ext_resource type="Texture2D" uid="uid://b4pmrijtdqgvp" path="res://Taide/icon.svg" id="2_f1l0t"]
+[ext_resource type="FontFile" uid="uid://bf18iu4gwpa38" path="res://Taide/Xolonium-Regular.ttf" id="2_tciju"]
+[ext_resource type="Texture2D" uid="uid://do4mhk3ubuqnw" path="res://Taide/elkkupalkki.png" id="3_gclub"]
+[ext_resource type="Texture2D" uid="uid://b7ecb7g68srw5" path="res://Taide/elkkupalkkireunus.png" id="4_ubb0i"]
+[ext_resource type="AudioStream" uid="uid://bi132ynpk18dh" path="res://Äänet/työkalu.wav" id="5_gclub"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_3xd07"]
 height = 1.4893799
@@ -11,10 +14,16 @@ radius = 0.78125
 bg_color = Color(0, 1, 0, 0.5882353)
 
 [sub_resource type="LabelSettings" id="LabelSettings_3xd07"]
+font = ExtResource("2_tciju")
 font_color = Color(0, 0.6666667, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3xd07"]
 bg_color = Color(0, 1, 0, 0.5882353)
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_3xd07"]
+random_pitch = 1.0717734
+streams_count = 1
+stream_0/stream = ExtResource("5_gclub")
 
 [node name="Interakitokomponentti" type="Node3D" unique_id=444952518]
 script = ExtResource("1_ynhrs")
@@ -33,6 +42,7 @@ unique_name_in_owner = true
 wait_time = 2.0
 
 [node name="HUDI" type="CanvasLayer" parent="." unique_id=914900546]
+process_mode = 3
 
 [node name="Mittari" type="ProgressBar" parent="HUDI" unique_id=625858676]
 unique_name_in_owner = true
@@ -85,9 +95,11 @@ grow_vertical = 0
 max_value = 5.0
 value = 5.0
 fill_mode = 3
-texture_under = ExtResource("2_f1l0t")
-texture_progress = ExtResource("2_f1l0t")
+texture_under = ExtResource("3_gclub")
+texture_over = ExtResource("4_ubb0i")
+texture_progress = ExtResource("3_gclub")
 tint_under = Color(1, 0, 0, 1)
+tint_over = Color(0, 0, 0, 1)
 tint_progress = Color(0, 1, 0, 1)
 
 [node name="Teksti" type="Label" parent="HUDI/Elkkupalkki" unique_id=1391927083]
@@ -133,6 +145,11 @@ text = "Warp Progress"
 label_settings = SubResource("LabelSettings_3xd07")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Korjausääni" type="AudioStreamPlayer" parent="." unique_id=473672271]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_3xd07")
+volume_db = -3.0
 
 [connection signal="area_entered" from="Interaktioetäisyys" to="." method="_on_interaktioetäisyys_area_entered"]
 [connection signal="area_exited" from="Interaktioetäisyys" to="." method="_on_interaktioetäisyys_area_exited"]

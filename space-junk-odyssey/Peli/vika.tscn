@@ -1,19 +1,16 @@
 [gd_scene format=3 uid="uid://dgllvxavfqr0d"]
 
 [ext_resource type="Script" uid="uid://du52dpiolbu43" path="res://Peli/vika.gd" id="1_acgcj"]
+[ext_resource type="PackedScene" uid="uid://b1o5vwlmde3sp" path="res://Taide/kivi.glb" id="2_1tnyb"]
 [ext_resource type="PackedScene" uid="uid://4455ir2nqko7" path="res://Peli/interaktioitava.tscn" id="2_k0a28"]
-[ext_resource type="AudioStream" uid="uid://dlkp731uvno72" path="res://Äänet/Metal Pipe.wav" id="3_0x0ke"]
+[ext_resource type="AudioStream" uid="uid://blksmysswq4gc" path="res://Äänet/sähkö1.wav" id="3_on2q6"]
+[ext_resource type="AudioStream" uid="uid://y3o51w0ikwxi" path="res://Äänet/sähkö2.wav" id="4_1tnyb"]
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_3xd07"]
-size = Vector3(1, 1.1293945, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_3xd07"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jq8tk"]
-albedo_color = Color(1, 0, 0, 1)
+[sub_resource type="SphereShape3D" id="SphereShape3D_1tnyb"]
+radius = 0.6219236
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_xlf1u"]
-height = 1.949707
+height = 2.3034668
 radius = 1.8632813
 
 [sub_resource type="Gradient" id="Gradient_0x0ke"]
@@ -26,7 +23,7 @@ gradient = SubResource("Gradient_0x0ke")
 spread = 90.0
 initial_velocity_min = 1.0
 initial_velocity_max = 2.0
-gravity = Vector3(0, 0, 2)
+gravity = Vector3(0, 2, 2)
 scale_min = 0.5
 color_ramp = SubResource("GradientTexture1D_j0ogg")
 
@@ -35,45 +32,122 @@ transparency = 1
 vertex_color_use_as_albedo = true
 albedo_color = Color(0, 1, 1, 1)
 emission_enabled = true
-emission = Color(0.8149164, 0.8804994, 1, 1)
+emission = Color(0, 0, 0.9764706, 1)
 emission_energy_multiplier = 2.0
 
 [sub_resource type="SphereMesh" id="SphereMesh_3xd07"]
 material = SubResource("StandardMaterial3D_on2q6")
 radius = 0.05
 height = 0.1
+radial_segments = 4
+rings = 1
+
+[sub_resource type="Curve" id="Curve_1tnyb"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.76351357, 0.7865169), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_3xd07"]
+curve = SubResource("Curve_1tnyb")
+
+[sub_resource type="Curve" id="Curve_s5t03"]
+_data = [Vector2(0, 0.011235952), 0.0, 0.0, 0, 0, Vector2(0.30405408, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_dwprg"]
+curve = SubResource("Curve_s5t03")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_xwm1l"]
+emission_shape = 1
+emission_sphere_radius = 1.0
+direction = Vector3(0, -1, 0)
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+gravity = Vector3(0, 5, 0)
+scale_min = 0.5
+scale_max = 1.5
+scale_curve = SubResource("CurveTexture_dwprg")
+color = Color(0.24840015, 0.24840018, 0.24840015, 1)
+alpha_curve = SubResource("CurveTexture_3xd07")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6fhyq"]
+transparency = 1
+vertex_color_use_as_albedo = true
+
+[sub_resource type="SphereMesh" id="SphereMesh_5roeb"]
+material = SubResource("StandardMaterial3D_6fhyq")
 radial_segments = 8
-rings = 6
+rings = 4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8uvhc"]
+albedo_color = Color(1, 0, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3xd07"]
+material = SubResource("StandardMaterial3D_8uvhc")
+top_radius = 2.0
+bottom_radius = 2.0
+height = 0.08
+radial_segments = 8
+rings = 1
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_3xd07"]
+playback_mode = 1
+random_pitch = 1.096825
+random_volume_offset_db = 1.0
+streams_count = 2
+stream_0/stream = ExtResource("3_on2q6")
+stream_1/stream = ExtResource("4_1tnyb")
 
 [node name="Vika" type="StaticBody3D" unique_id=938647559]
 collision_layer = 0
 collision_mask = 0
 script = ExtResource("1_acgcj")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=206056034]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.18937153, 0)
-shape = SubResource("BoxShape3D_3xd07")
-
-[node name="Malli" type="MeshInstance3D" parent="." unique_id=359889840]
+[node name="Malli" parent="." unique_id=1883293722 instance=ExtResource("2_1tnyb")]
 unique_name_in_owner = true
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.002397418, -0.45344597, 0.0013757944)
-mesh = SubResource("BoxMesh_3xd07")
-surface_material_override/0 = SubResource("StandardMaterial3D_jq8tk")
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=206056034]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.27967504, 0)
+shape = SubResource("SphereShape3D_1tnyb")
 
 [node name="Interaktioitava" parent="." unique_id=185321842 instance=ExtResource("2_k0a28")]
 unique_name_in_owner = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Interaktioitava" unique_id=1469779413]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7541504, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.54417694, 0)
 shape = SubResource("CylinderShape3D_xlf1u")
-
-[node name="Ääni" type="AudioStreamPlayer3D" parent="." unique_id=1144539832]
-stream = ExtResource("3_0x0ke")
-autoplay = true
 
 [node name="Kipinät" type="GPUParticles3D" parent="." unique_id=592452315]
 amount = 4
 explosiveness = 0.5
 fixed_fps = 60
+local_coords = true
 process_material = SubResource("ParticleProcessMaterial_6fhyq")
 draw_pass_1 = SubResource("SphereMesh_3xd07")
+
+[node name="Savu" type="GPUParticles3D" parent="." unique_id=1211545681]
+amount = 12
+lifetime = 2.0
+explosiveness = 1.0
+fixed_fps = 60
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_xwm1l")
+draw_pass_1 = SubResource("SphereMesh_5roeb")
+
+[node name="Merkki" type="MeshInstance3D" parent="." unique_id=712185319]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.58591354, 0)
+layers = 2
+mesh = SubResource("CylinderMesh_3xd07")
+
+[node name="Sähköääni" type="AudioStreamPlayer3D" parent="." unique_id=1834033899]
+unique_name_in_owner = true
+stream = SubResource("AudioStreamRandomizer_3xd07")
+volume_db = -10.0
+max_distance = 4.0
+
+[node name="Ääniaika" type="Timer" parent="." unique_id=180706658]
+unique_name_in_owner = true
+wait_time = 0.8
+autostart = true
+
+[connection signal="timeout" from="Ääniaika" to="." method="_on_ääniaika_timeout"]

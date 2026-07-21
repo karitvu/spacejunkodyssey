@@ -5,6 +5,7 @@ extends Node3D
 @onready var karttakamera: Camera3D = %Karttakamera
 @onready var kameraankkuri: Node3D = %Kameraankkuri
 @onready var karttavalo: DirectionalLight3D = %Karttavalo
+@onready var nappiääni: AudioStreamPlayer = %Nappiääni
 
 
 func _process(_delta: float) -> void:
@@ -36,6 +37,7 @@ func lopetus(tulos: String):
 
 func _on_nappi_pressed() -> void:
 	get_tree().paused = false
+	nappiääni.play()
 	Globaalit.HYPPYAIKA = 0
 	Globaalit.VIAT = 0
 	get_tree().change_scene_to_file("res://Peli/aloitusruutu.tscn")

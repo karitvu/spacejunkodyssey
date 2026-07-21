@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cvglmmcgfmjud"]
 
 [ext_resource type="Script" uid="uid://bphkpcgfns5nv" path="res://Peli/räjähdys.gd" id="1_q1f5e"]
-[ext_resource type="AudioStream" uid="uid://dlkp731uvno72" path="res://Äänet/Metal Pipe.wav" id="2_1mooo"]
+[ext_resource type="AudioStream" uid="uid://dk7h7jy5mn0cn" path="res://Äänet/pum.wav" id="2_3ujle"]
 
 [sub_resource type="Curve" id="Curve_1mooo"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.5878379, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 1.2933831, 0.0, 0, 0]
@@ -102,6 +102,11 @@ color = Color(1, 0.94509804, 0, 1)
 color_ramp = SubResource("GradientTexture1D_j0ogg")
 emission_curve = SubResource("CurveTexture_t7n2i")
 
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_on2q6"]
+random_pitch = 1.0656005
+streams_count = 1
+stream_0/stream = ExtResource("2_3ujle")
+
 [node name="Räjähdys" type="Node3D" unique_id=205636441]
 script = ExtResource("1_q1f5e")
 
@@ -135,4 +140,5 @@ process_material = SubResource("ParticleProcessMaterial_dwbtc")
 draw_pass_1 = SubResource("SphereMesh_3xd07")
 
 [node name="Ääni" type="AudioStreamPlayer3D" parent="." unique_id=670302693]
-stream = ExtResource("2_1mooo")
+process_mode = 3
+stream = SubResource("AudioStreamRandomizer_on2q6")

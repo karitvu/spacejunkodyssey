@@ -7,6 +7,11 @@
 [ext_resource type="Script" uid="uid://it6bjaxiyutr" path="res://Peli/spawneri.gd" id="2_rk1dd"]
 [ext_resource type="PackedScene" uid="uid://bnsi3b5i4adus" path="res://Taide/Holoraketti.glb" id="2_uui6q"]
 [ext_resource type="PackedScene" uid="uid://nip2npe2nmtf" path="res://Taide/Raketti.glb" id="3_6orbo"]
+[ext_resource type="PackedScene" uid="uid://bpwdyrg18vw7g" path="res://Taide/käsi.glb" id="7_gb08r"]
+[ext_resource type="Shader" uid="uid://cuq7hklecmmyk" path="res://Taide/moottori.gdshader" id="9_4tyw3"]
+[ext_resource type="Shader" uid="uid://dhmwjh2fyf5wg" path="res://Taide/maailma.gdshader" id="9_4v3jh"]
+[ext_resource type="FontFile" uid="uid://bf18iu4gwpa38" path="res://Taide/Xolonium-Regular.ttf" id="9_hjxqt"]
+[ext_resource type="AudioStream" uid="uid://meodybslwymg" path="res://Äänet/Korjattu nappula.wav" id="11_r4h04"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_6fhyq"]
 panorama = ExtResource("2_6orbo")
@@ -47,10 +52,49 @@ height = 9.987549
 
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_rk1dd"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6fhyq"]
+albedo_color = Color(1, 1, 0, 1)
+
+[sub_resource type="PrismMesh" id="PrismMesh_3xd07"]
+material = SubResource("StandardMaterial3D_6fhyq")
+size = Vector3(5.96, 5.84, 0.08)
+
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_0xymd"]
 
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ia3xa"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_r4h04"]
+noise = SubResource("FastNoiseLite_ia3xa")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_4tyw3"]
+render_priority = 0
+shader = ExtResource("9_4tyw3")
+shader_parameter/haihtuminen = 0.78700003412262
+shader_parameter/uv_keski = 0.085
+shader_parameter/noise_tekstuuri = SubResource("NoiseTexture2D_r4h04")
+shader_parameter/noise_suunta = Vector2(0, 0.5)
+shader_parameter/noise_skaala = Vector2(1, -0.08)
+shader_parameter/noise_voima = 0.5
+shader_parameter/paavari = Color(0, 0.8, 1, 1)
+shader_parameter/neon = 3.0
+shader_parameter/fresnel_voima = 1.5
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_hjxqt"]
+material = SubResource("ShaderMaterial_4tyw3")
+top_radius = 0.23095703
+bottom_radius = 0.73095703
+height = 3.2561035
+rings = 0
+cap_top = false
+cap_bottom = false
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_3xd07"]
+random_pitch = 1.0717734
+streams_count = 1
+stream_0/stream = ExtResource("11_r4h04")
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_jq8tk"]
-albedo_color = Color(0, 1, 0, 1)
+albedo_color = Color(0, 0.18744907, 0, 1)
 disable_receive_shadows = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_3xd07"]
@@ -59,6 +103,16 @@ size = Vector2(1000, 1000)
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_jq8tk"]
 viewport_path = NodePath("Kartankääntö/Kuvakulma")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3xd07"]
+shader = ExtResource("9_4v3jh")
+shader_parameter/scanlines_1 = 513.075
+shader_parameter/scanlines_2 = 15.51
+shader_parameter/scan_reduction = 0.01
+shader_parameter/blur = 0.10000000149012
+shader_parameter/diffusion = 0.1
+shader_parameter/vinnette_alpla = 0.0999999977648
+shader_parameter/vinnette_inner_radius = 10.06
 
 [node name="Maailma" type="Node3D" unique_id=760366018]
 script = ExtResource("1_b8ux2")
@@ -103,18 +157,17 @@ transform = Transform3D(4.739278, 3.1557902e-11, -0.082724296, 0.082724296, -3.6
 shape = SubResource("SphereShape3D_263ss")
 
 [node name="Suojakenttä" type="StaticBody3D" parent="Alus" unique_id=364987274]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 46.67095)
-visible = false
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 45.241146)
 collision_layer = 3
 collision_mask = 3
 
 [node name="Este" type="CollisionShape3D" parent="Alus/Suojakenttä" unique_id=1785241086]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -1.468656e-07, 1.0130615)
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 0, -1.468656e-07, 0.9813118)
 shape = SubResource("CylinderShape3D_6orbo")
 debug_color = Color(0.9529412, 0, 0.5568628, 1)
 
 [node name="Este2" type="CollisionShape3D" parent="Alus/Suojakenttä" unique_id=917283824]
-transform = Transform3D(0.9998477, -0.017452406, 0, 0.017452406, 0.9998477, 0, 0, 0, 1, -0.33598614, 12.330877, -67.11171)
+transform = Transform3D(0.9998477, -0.017452406, 0, 0.017452406, 0.9998477, 0, 0, 0, 1, -0.33598614, 12.330877, -65.63978)
 shape = SubResource("CylinderShape3D_hjxqt")
 debug_color = Color(0.9529412, 0, 0.5568628, 1)
 
@@ -164,9 +217,23 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.666, 0)
 
 [node name="Interakitokomponentti" parent="Alus/Pelaaja" unique_id=444952518 instance=ExtResource("2_0xymd")]
 
+[node name="käsi" parent="Alus/Pelaaja" unique_id=48039303 instance=ExtResource("7_gb08r")]
+unique_name_in_owner = true
+transform = Transform3D(0.8232235, -0.3808588, -0.42101014, 0.3812272, 0.9203639, -0.08715575, 0.42067653, -0.08875186, 0.90285903, -0.4, -0.035, -0.88)
+
+[node name="käsi2" parent="Alus/Pelaaja" unique_id=1550347655 instance=ExtResource("7_gb08r")]
+unique_name_in_owner = true
+transform = Transform3D(0.99539614, -0.01878078, 0.09398774, 1.714561e-07, 0.98061466, 0.19594613, -0.09584578, -0.19504403, 0.9761, 0.4, -0.035, -0.88)
+
+[node name="Kolmio" type="MeshInstance3D" parent="Alus/Pelaaja" unique_id=1418913971]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.006278038, 0)
+layers = 2
+mesh = SubResource("PrismMesh_3xd07")
+
 [node name="Spawneri" type="CharacterBody3D" parent="Alus" unique_id=822402304]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.630663, -4.442511)
+visible = false
 collision_layer = 2
 collision_mask = 2
 wall_min_slide_angle = 3.1415927
@@ -196,8 +263,25 @@ unique_name_in_owner = true
 wait_time = 2.5
 autostart = true
 
-[node name="Viat" type="Node3D" parent="Alus" unique_id=160049564]
+[node name="Kohta" type="Node3D" parent="Alus/Spawneri" unique_id=2094310056]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.7221985, 0)
+
+[node name="Moottoriefekti" type="MeshInstance3D" parent="Alus" unique_id=444643778]
+transform = Transform3D(3.455, 0, 0, 0, -1.5102285e-07, -3.455, 0, 3.455, -1.5102285e-07, 0, -2.1780991e-08, 53.333984)
+mesh = SubResource("CylinderMesh_hjxqt")
+
+[node name="Moottoriefekti2" type="MeshInstance3D" parent="Alus" unique_id=1451677028]
+transform = Transform3D(3.692, 0, 0, 0, -1.6138245e-07, -3.692, 0, 3.692, -1.6138245e-07, 0.5208893, -26.236416, 60.074856)
+mesh = SubResource("CylinderMesh_hjxqt")
+
+[node name="Moottoriefekti3" type="MeshInstance3D" parent="Alus" unique_id=1618149253]
+transform = Transform3D(3.692, 0, 0, 0, -1.6138245e-07, -3.692, 0, 3.692, -1.6138245e-07, -23.299786, 12.737828, 60.074856)
+mesh = SubResource("CylinderMesh_hjxqt")
+
+[node name="Moottoriefekti4" type="MeshInstance3D" parent="Alus" unique_id=52208673]
+transform = Transform3D(3.692, 0, 0, 0, -1.6138245e-07, -3.692, 0, 3.692, -1.6138245e-07, 22.838676, 13.381304, 60.074856)
+mesh = SubResource("CylinderMesh_hjxqt")
 
 [node name="Loppuruutu" type="CanvasLayer" parent="." unique_id=430730121]
 unique_name_in_owner = true
@@ -226,6 +310,7 @@ offset_bottom = -144.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/default_color = Color(0, 0.6862745, 0, 1)
+theme_override_fonts/normal_font = ExtResource("9_hjxqt")
 theme_override_font_sizes/normal_font_size = 30
 bbcode_enabled = true
 text = "LOREM"
@@ -248,7 +333,14 @@ offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 0.6862745, 0, 1)
+theme_override_fonts/font = ExtResource("9_hjxqt")
 text = "Main Menu"
+
+[node name="Nappiääni" type="AudioStreamPlayer" parent="Loppuruutu" unique_id=738012641]
+unique_name_in_owner = true
+process_mode = 3
+stream = SubResource("AudioStreamRandomizer_3xd07")
+volume_db = -1.0
 
 [node name="Kartankääntö" type="Node3D" parent="." unique_id=989370814]
 unique_name_in_owner = true
@@ -263,7 +355,7 @@ mesh = SubResource("PlaneMesh_3xd07")
 [node name="Karttavalo" type="DirectionalLight3D" parent="Kartankääntö/Kartta" unique_id=1422263418]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 79.67799, 0)
-layers = 2
+layers = 10
 light_energy = 7.495
 light_cull_mask = 4294966274
 sky_mode = 1
@@ -283,6 +375,16 @@ grow_vertical = 0
 scale = Vector2(0.5, 0.5)
 texture = SubResource("ViewportTexture_jq8tk")
 
+[node name="CRT" type="ColorRect" parent="Kartankääntö/Kartta/Minikartta" unique_id=1076905645]
+material = SubResource("ShaderMaterial_3xd07")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
 [node name="Kameraankkuri" type="Node3D" parent="Kartankääntö" unique_id=965450381]
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 80.975006, 11.182432)
@@ -295,6 +397,9 @@ render_target_update_mode = 4
 unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 80.975006, 11.182432)
 cull_mask = 1047562
+
+[node name="Viat" type="Node3D" parent="." unique_id=160049564]
+unique_name_in_owner = true
 
 [connection signal="timeout" from="Voittoaika" to="." method="_on_voittoaika_timeout"]
 [connection signal="timeout" from="Alus/Spawneri/Spawniajastin" to="Alus/Spawneri" method="_on_spawniajastin_timeout"]

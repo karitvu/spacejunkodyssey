@@ -14,6 +14,9 @@ var painovoimaylös = Vector3.UP
 
 @onready var spawniaika = %Spawniajastin
 @onready var suunta_aika = %"Suunta-ajastin"
+@onready var kohta: Node3D = %Kohta
+
+
 var suunnat = [Vector3.LEFT, Vector3.RIGHT, Vector3.FORWARD, Vector3.BACK]
 var käännökset = ["oikea", "vasen", "suoraan"]
 var input_suunta = suunnat.pick_random()
@@ -101,9 +104,15 @@ func _on_spawniajastin_timeout() -> void:
 	print(global_basis)
 	var uusivika = vika.instantiate()
 	var pum = räjähdys.instantiate()
-	var paikka = global_transform
-	uusivika.global_transform = paikka
-	pum.global_transform = paikka
+	var paikka = kohta.global_position # - painovoimaylös * Vector3.UP * 5
+	var kulma = kohta.global_rotation
+	var miten = säde.get_collision_normal()
+	uusivika.rotate_object_local(miten, deg_to_rad(kulma.z))
+	uusivika.rotate_object_local(miten, deg_to_rad(kulma.x))
+	pum.rotation_degrees = painovoimaylös
+	uusivika.global_position = paikka
+	pum.global_position = paikka
+	
 	%Viat.add_child(uusivika)
 	%Viat.add_child(pum)
 	Globaalit.VIAT += 1
